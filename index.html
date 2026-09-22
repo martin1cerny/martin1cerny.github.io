@@ -215,10 +215,9 @@
     const container = document.getElementById("projects");
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Odkaz na živou stránku projektu: přednostně vyplněný "homepage",
-    // jinak sestavíme adresu GitHub Pages podle názvu repozitáře.
+    // Odkaz vede vždy na MOJE GitHub Pages (ne na "homepage", které
+    // u forků odkazuje na původní projekt).
     function pagesUrl(repo) {
-      if (repo.homepage && repo.homepage.trim()) return repo.homepage.trim();
       return `${pagesBase}/${repo.name}/`;
     }
 
@@ -236,8 +235,8 @@
     function renderProjects(repos) {
       if (!repos.length) {
         renderState(
-          `Zatím zde nejsou žádné projekty označené štítkem <strong>${TOPIC}</strong>. ` +
-          `Přidejte tento topic k repozitáři na GitHubu a stránka se aktualizuje sama.`
+          `Zatím zde nejsou žádné projekty se štítkem <strong>${TOPIC}</strong> a zapnutými GitHub Pages. ` +
+          `Přidejte repozitáři tento topic a zapněte Pages – stránka se aktualizuje sama.`
         );
         return;
       }
@@ -260,16 +259,25 @@
     }
 
     async function load() {
-      const api = `https://api.github.com/search/repositories`
-        + `?q=user:${GITHUB_USER}+topic:${TOPIC}+fork:false`
-        + `&sort=updated&order=desc&per_page=100`;
+      // Používáme výpis repozitářů (ne Search API, které vynechává forky)
+      // a filtrujeme na straně klienta podle topicu a zapnutých Pages.
       try {
-        const res = await fetch(api, {
-          headers: { "Accept": "application/vnd.github+json" }
-        });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const data = await res.json();
-        renderProjects(data.items || []);
+        const repos = [];
+        for (let page = 1; page <= 5; page++) {
+          const api = `https://api.github.com/users/${GITHUB_USER}/repos`
+            + `?per_page=100&type=owner&sort=updated&page=${page}`;
+          const res = await fetch(api, {
+            headers: { "Accept": "application/vnd.github+json" }
+          });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const batch = await res.json();
+          repos.push(...batch);
+          if (batch.length < 100) break; // poslední stránka
+        }
+        const items = repos.filter(r =>
+          Array.isArray(r.topics) && r.topics.includes(TOPIC) && r.has_pages
+        );
+        renderProjects(items);
       } catch (err) {
         renderState(
           `Projekty se nepodařilo načíst z GitHubu. Zkuste stránku obnovit později, ` +
