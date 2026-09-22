@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rozcestník – Martin Černý</title>
+  <meta name="description" content="Rozcestník vzdělávacích projektů a materiálů Martina Černého.">
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --border: #e3e3df;
+      --text: #1a1a18;
+      --muted: #6b6b64;
+      --accent: #2f6f4f;
+      --accent-hover: #245740;
+      --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.05);
+      --radius: 14px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #16171a;
+        --surface: #1f2125;
+        --border: #33363c;
+        --text: #ececec;
+        --muted: #9aa0a6;
+        --accent: #5fbf90;
+        --accent-hover: #7ccfa5;
+        --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 20px rgba(0,0,0,.35);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 48px 16px 72px;
+    }
+    header { margin-bottom: 40px; }
+    h1 {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      line-height: 1.15;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      font-size: 1.08rem;
+      color: var(--muted);
+      max-width: 60ch;
+      margin: 0;
+    }
+    section { margin-top: 44px; }
+    h2 {
+      font-size: 1.25rem;
+      margin: 0 0 4px;
+      letter-spacing: -0.01em;
+    }
+    .section-note {
+      color: var(--muted);
+      font-size: .95rem;
+      margin: 0 0 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 20px 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.12rem;
+      letter-spacing: -0.01em;
+    }
+    .card h3 a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    .card h3 a:hover { color: var(--accent); }
+    .card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: .95rem;
+      flex: 1;
+    }
+    .card-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost {
+      color: var(--muted);
+      border-color: var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+    .state {
+      color: var(--muted);
+      font-size: .98rem;
+      padding: 8px 0;
+    }
+    .state a { color: var(--accent); }
+    .skeleton {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      height: 150px;
+      position: relative;
+      overflow: hidden;
+    }
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(128,128,128,.08), transparent);
+      transform: translateX(-100%);
+      animation: shimmer 1.3s infinite;
+    }
+    @keyframes shimmer { 100% { transform: translateX(100%); } }
+    @media (prefers-reduced-motion: reduce) {
+      .card, .btn { transition: none; }
+      .skeleton::after { animation: none; }
+    }
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      justify-content: space-between;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Rozcestník</h1>
+      <p class="lead">
+        Vítejte. Na této stránce najdete přehled mých vzdělávacích projektů
+        publikovaných přes GitHub Pages. Časem sem přibydou i další materiály a zdroje.
+      </p>
+    </header>
+
+    <section id="education">
+      <h2>Vzdělávací projekty</h2>
+      <p class="section-note">Interaktivní projekty a aplikace využitelné ve výuce.</p>
+      <div class="grid" id="projects" aria-live="polite">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+    </section>
+
+    <!--
+      Chcete přidat další sekci (např. „Materiály“ nebo „Odkazy“)?
+      Stačí zkopírovat blok <section> výše a naplnit jej obsahem.
+    -->
+
+    <footer>
+      <span>© <span id="year"></span> Martin Černý</span>
+      <a href="https://github.com/martin1cerny" rel="noopener">GitHub profil →</a>
+    </footer>
+  </div>
+
+  <script>
+    // === Nastavení ===
+    const GITHUB_USER = "martin1cerny";
+    const TOPIC = "education";
+    // Uživatelské GitHub Pages: projektové stránky jsou na https://<user>.github.io/<repo>/
+    const pagesBase = `https://${GITHUB_USER}.github.io`;
+
+    const container = document.getElementById("projects");
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Odkaz na živou stránku projektu: přednostně vyplněný "homepage",
+    // jinak sestavíme adresu GitHub Pages podle názvu repozitáře.
+    function pagesUrl(repo) {
+      if (repo.homepage && repo.homepage.trim()) return repo.homepage.trim();
+      return `${pagesBase}/${repo.name}/`;
+    }
+
+    function escapeHtml(s) {
+      const d = document.createElement("div");
+      d.textContent = s || "";
+      return d.innerHTML;
+    }
+
+    function renderState(html) {
+      container.classList.remove("grid");
+      container.innerHTML = `<p class="state">${html}</p>`;
+    }
+
+    function renderProjects(repos) {
+      if (!repos.length) {
+        renderState(
+          `Zatím zde nejsou žádné projekty označené štítkem <strong>${TOPIC}</strong>. ` +
+          `Přidejte tento topic k repozitáři na GitHubu a stránka se aktualizuje sama.`
+        );
+        return;
+      }
+      container.classList.add("grid");
+      container.innerHTML = repos.map(repo => {
+        const url = pagesUrl(repo);
+        const desc = repo.description
+          ? escapeHtml(repo.description)
+          : "Bez popisu.";
+        return `
+          <article class="card">
+            <h3><a href="${escapeHtml(url)}" rel="noopener">${escapeHtml(repo.name)}</a></h3>
+            <p>${desc}</p>
+            <div class="card-links">
+              <a class="btn btn-primary" href="${escapeHtml(url)}" rel="noopener">Otevřít →</a>
+              <a class="btn btn-ghost" href="${escapeHtml(repo.html_url)}" rel="noopener">Zdrojový kód</a>
+            </div>
+          </article>`;
+      }).join("");
+    }
+
+    async function load() {
+      const api = `https://api.github.com/search/repositories`
+        + `?q=user:${GITHUB_USER}+topic:${TOPIC}+fork:false`
+        + `&sort=updated&order=desc&per_page=100`;
+      try {
+        const res = await fetch(api, {
+          headers: { "Accept": "application/vnd.github+json" }
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        renderProjects(data.items || []);
+      } catch (err) {
+        renderState(
+          `Projekty se nepodařilo načíst z GitHubu. Zkuste stránku obnovit později, ` +
+          `nebo si repozitáře prohlédněte přímo na ` +
+          `<a href="https://github.com/${GITHUB_USER}?tab=repositories" rel="noopener">mém GitHub profilu</a>.`
+        );
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>
