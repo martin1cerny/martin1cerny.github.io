@@ -209,8 +209,12 @@
     // === Nastavení ===
     const GITHUB_USER = "martin1cerny";
     const TOPIC = "education";
-    // Uživatelské GitHub Pages: projektové stránky jsou na https://<user>.github.io/<repo>/
-    const pagesBase = `https://${GITHUB_USER}.github.io`;
+    // Základ pro odkazy na projektové stránky. Používáme doménu, na které
+    // web běží (funguje i po případné změně vlastní domény), jinak záložně
+    // vlastní doménu tohoto webu.
+    const pagesBase = location.protocol.startsWith("http")
+      ? location.origin
+      : "https://tools.iktlab.cz";
 
     const container = document.getElementById("projects");
     document.getElementById("year").textContent = new Date().getFullYear();
